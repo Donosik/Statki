@@ -1,48 +1,26 @@
 #include "Board.h"
 
-Board::Board(bool _isShooting)
+Board::Board(int _offset,bool _isPlayer)
 {
-    isShooting = _isShooting;
+    isPlayer=_isPlayer;
+    offset=_offset;
+    isDead=false;
     for (int i = 0; i < 10; i++)
     {
         for (int j = 0; j < 10; j++)
         {
-            array[i][j] = "*";
-        }
-    }
-    normal = sf::Color(0, 0, 0);
-    shooted = sf::Color(255, 0, 0);
-    setted = sf::Color(0, 255, 0);
-    for (int i = 0; i < 10; i++)
-    {
-        for (int j = 0; j < 10; j++)
-        {
-            outerShape[i][j].setPosition(i*20+10,j*20+10);
-            outerShape[i][j].setFillColor(sf::Color(255,255,255));
+            tiles[i][j] = Tile(i, j,offset);
         }
     }
 }
 
-#include <iostream>
-
 void Board::Draw(sf::RenderWindow &window)
 {
-    //TODO: DEBUG
-    /*
     for (int i = 0; i < 10; i++)
     {
         for (int j = 0; j < 10; j++)
         {
-            std::cout << array[i][j] << " ";
-        }
-        std::cout << std::endl;
-    }
-     */
-    for (int i = 0; i < 10; i++)
-    {
-        for (int j = 0; j < 10; j++)
-        {
-            window.draw(outerShape[i][j]);
+            tiles[i][j].Draw(window);
         }
     }
 }

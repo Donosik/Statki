@@ -3,20 +3,36 @@
 
 #include <string>
 #include <SFML/Graphics.hpp>
+#include "Tile.h"
 
 class Board
 {
-    std::string array[10][10];
-    sf::RectangleShape outerShape[10][10];
-    sf::RectangleShape innerShape[10][10];
-    sf::Color normal;
-    sf::Color shooted;
-    sf::Color setted;
-    bool isShooting;
+protected:
+    bool isDead;
+    Tile tiles[10][10];
+    int offset;
+    bool isPlayer;
 public:
-    Board(bool _isShooting);
+    Board(int _offset,bool _isPlayer=true);
+
+    virtual void Set(int x, int y) = 0;
 
     void Draw(sf::RenderWindow &window);
+
+    inline void SetHoovered(int x,int y)
+    {
+        tiles[x][y].SetHoovered();
+    }
+
+    inline bool getIsDead()
+    {
+        return isDead;
+    }
+
+    inline bool IsBusy(int x,int y)
+    {
+        return tiles[x][y].IsTaken();
+    }
 };
 
 

@@ -3,7 +3,7 @@ project(Statki)
 
 set(CMAKE_CXX_STANDARD 23)
 
-add_executable(Statki main.cpp App.cpp App.h Board.cpp Board.h)
+add_executable(Statki main.cpp App.cpp App.h Board.cpp Board.h Tile.cpp Tile.h ShootingBoard.cpp ShootingBoard.h ShowingBoard.cpp ShowingBoard.h)
 
 set(SFML_STATIC_LIBRARIES TRUE)
 set(SFML_DIR C:/SFML/lib/cmake/SFML)
