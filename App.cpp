@@ -9,7 +9,6 @@ App::App() : window(sf::VideoMode(1250, 650), "Statki", sf::Style::Titlebar | sf
     playerShootingBoard = std::make_unique<ShootingBoard>();
     computerBoard = std::make_unique<ShowingBoard>();
     computerShootingBoard = std::make_unique<ShootingBoard>();
-
     FontSetting();
 
     Run();
@@ -129,10 +128,9 @@ void App::Setting(sf::Event &event)
         isChoosen = true;
         choosenX = x;
         choosenY = y;
-        //TODO: Nie działa sprawdzić czemu, niepoprawnie sprawdza czy pole jest zajete
-        if (playerBoard->IsBusy(choosenX, choosenX))
+
+        if (playerBoard->IsBusy(choosenX, choosenY))
         {
-            std::cout << "JEST ZAJETE" << std::endl;
             isChoosen = false;
             return;
         }

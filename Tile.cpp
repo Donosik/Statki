@@ -30,6 +30,7 @@ void Tile::Draw(sf::RenderWindow &window)
 
 void Tile::SetStatus(int length)
 {
+    status=Status::TAKEN;
     sf::Color shipColor;
     switch (length)
     {
