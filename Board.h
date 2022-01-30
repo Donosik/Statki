@@ -15,8 +15,6 @@ protected:
 public:
     Board(int _offset,bool _isPlayer=true);
 
-    virtual void Set(int x, int y) = 0;
-
     void Draw(sf::RenderWindow &window);
 
     inline void SetHoovered(int x,int y)

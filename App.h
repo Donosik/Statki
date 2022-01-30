@@ -5,7 +5,8 @@
 #include "ShowingBoard.h"
 #include "ShootingBoard.h"
 #include <memory>
-
+#include <random>
+#include <chrono>
 #include <iostream>
 
 /// Główna klasa zarządzająca całą grą
@@ -31,6 +32,7 @@ class App
     bool isChoosen;
     int choosenX;
     int choosenY;
+    bool shipsSetted[4];
 public:
     App();
 
@@ -39,10 +41,13 @@ public:
     void Draw();
 
     void Events();
+
 private:
     void Setting(sf::Event &event);
 
-    void Shooting(sf::Event &event);
+    void PlayerShooting(sf::Event &event);
+
+    void ComputerShooting(sf::Event &event);
 
     void FontSetting();
 };

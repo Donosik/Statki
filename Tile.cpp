@@ -9,6 +9,8 @@ Tile::Tile()
     shape.setSize(sf::Vector2f(size * scale, size * scale));
     shape.setPosition(xPos * size, yPos * size);
     shape.setFillColor(sf::Color::Blue);
+    statusShip = StatusShip::EMPTY;
+    statusShoot = StatusShoot::EMPTY;
 }
 
 Tile::Tile(int x, int y, int offset)
@@ -20,7 +22,8 @@ Tile::Tile(int x, int y, int offset)
     shape.setSize(sf::Vector2f(size * scale, size * scale));
     shape.setPosition(xPos * size + offset + (size - (size * scale)) / 2, yPos * size + 50 + (size - (size * scale)) / 2);
     shape.setFillColor(sf::Color(0, 0, 255));
-    status = Status::EMPTY;
+    statusShip = StatusShip::EMPTY;
+    statusShoot = StatusShoot::EMPTY;
 }
 
 void Tile::Draw(sf::RenderWindow &window)
@@ -30,7 +33,7 @@ void Tile::Draw(sf::RenderWindow &window)
 
 void Tile::SetStatus(int length)
 {
-    status=Status::TAKEN;
+    statusShip = StatusShip::TAKEN;
     sf::Color shipColor;
     switch (length)
     {
@@ -70,11 +73,29 @@ void Tile::SetHoovered()
     }
     else
     {
-        shape.setFillColor(sf::Color(128,128,128));
+        shape.setFillColor(sf::Color(128, 128, 128));
     }
 }
 
 bool Tile::IsTaken()
 {
-    return status == Status::TAKEN;
+    return statusShip == StatusShip::TAKEN;
+}
+
+void Tile::SetShooted(bool hit)
+{
+    if (hit)
+    {
+        shape.setFillColor(sf::Color(200, 0, 50));
+    }
+    else
+    {
+        shape.setFillColor(sf::Color(50, 0, 200));
+    }
+    statusShoot = StatusShoot::SHOOTED;
+}
+
+bool Tile::IsShooted()
+{
+    return statusShoot==StatusShoot::SHOOTED;
 }

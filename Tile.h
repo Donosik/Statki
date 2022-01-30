@@ -5,19 +5,24 @@
 
 class Tile
 {
-    enum Status
+    enum class StatusShip
     {
         EMPTY,
-        TAKEN,
-        SHOOTED
+        TAKEN
     };
 
+    enum class StatusShoot
+    {
+        EMPTY,
+        SHOOTED
+    };
     sf::RectangleShape shape;
     float size;
     int xPos;
     int yPos;
     float scale;
-    Status status;
+    StatusShip statusShip;
+    StatusShoot statusShoot;
 public:
     Tile();
 
@@ -30,6 +35,10 @@ public:
     void SetHoovered();
 
     bool IsTaken();
+
+    void SetShooted(bool hit);
+
+    bool IsShooted();
 };
 
 

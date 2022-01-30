@@ -8,10 +8,15 @@ class ShowingBoard : public Board
 public:
     ShowingBoard(bool _isPlayer = true);
 
-    void Set(int x, int y) override;
-
     void SetShip(int xPos1, int yPos1, int xPos2, int yPos2);
 
+    bool IsShip(int x,int y);
+
+    bool isShooted(int x,int y);
+
+    void SetShooted(int x,int y,bool hit);
+private:
+    void SetShipsAsComputer();
 };
 
 

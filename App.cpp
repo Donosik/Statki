@@ -4,17 +4,19 @@ App::App() : window(sf::VideoMode(1250, 650), "Statki", sf::Style::Titlebar | sf
 {
     isChoosen = false;
     setting = true;
-    // TODO: settingi zrobi
     playerBoard = std::make_unique<ShowingBoard>();
     playerShootingBoard = std::make_unique<ShootingBoard>();
-    computerBoard = std::make_unique<ShowingBoard>();
-    computerShootingBoard = std::make_unique<ShootingBoard>();
+    computerBoard = std::make_unique<ShowingBoard>(false);
+    computerShootingBoard = std::make_unique<ShootingBoard>(false);
+    shipsSetted[0] = false;
+    shipsSetted[1] = false;
+    shipsSetted[2] = false;
+    shipsSetted[3] = false;
+
     FontSetting();
 
     Run();
 }
-
-#include <iostream>
 
 void App::Run()
 {
@@ -25,7 +27,7 @@ void App::Run()
             Events();
         } catch (std::exception &ex)
         {
-            std::cout << ex.what() << std::endl;
+            throw ex;
             break;
         }
         Draw();
@@ -47,11 +49,39 @@ void App::Events()
             if (setting)
             {
                 Setting(event);
+                bool endSetting = true;
+                for (int i = 0; i < 4; i++)
+                {
+                    if (shipsSetted[i] == false)
+                    {
+                        endSetting = false;
+                    }
+                }
+                if (endSetting)
+                {
+                    setting = false;
+                }
+
             }
                 // Faza strzelania
             else
             {
-                Shooting(event);
+                try
+                {
+                    PlayerShooting(event);
+                    ComputerShooting(event);
+                }
+                catch (std::exception &ex)
+                {
+                    if ((std::string) ex.what() == "graczWin")
+                    {
+                        comunicats.setString("Gracz Wygral");
+                    }
+                    else if ((std::string) ex.what() == "computerWin")
+                    {
+                        comunicats.setString("Komputer Wygral");
+                    }
+                }
             }
         }
     }
@@ -67,8 +97,6 @@ void App::Draw()
     window.draw(comunicats);
     window.display();
 }
-
-#include <iostream>
 
 void App::Setting(sf::Event &event)
 {
@@ -104,7 +132,11 @@ void App::Setting(sf::Event &event)
                         return;
                     }
                 }
-                playerBoard->SetShip(x, y, x, choosenY);
+                if (!shipsSetted[abs(y - choosenY) - 1])
+                {
+                    playerBoard->SetShip(x, y, x, choosenY);
+                    shipsSetted[abs(y - choosenY) - 1] = true;
+                }
             }
         }
         if (y == choosenY)
@@ -118,7 +150,11 @@ void App::Setting(sf::Event &event)
                         return;
                     }
                 }
-                playerBoard->SetShip(x, y, choosenX, y);
+                if (!shipsSetted[abs(x - choosenX) - 1])
+                {
+                    playerBoard->SetShip(x, y, choosenX, y);
+                    shipsSetted[abs(x - choosenX) - 1] = true;
+                }
             }
         }
 
@@ -134,14 +170,73 @@ void App::Setting(sf::Event &event)
             isChoosen = false;
             return;
         }
+
         playerBoard->SetHoovered(choosenX, choosenY);
     }
 
 }
 
-void App::Shooting(sf::Event &event)
+void App::PlayerShooting(sf::Event &event)
 {
+    int xPos = event.mouseButton.x;
+    int yPos = event.mouseButton.y;
+    if (yPos < 50)
+    {
+        return;
+    }
+    if (xPos > 650)
+    {
+        return;
+    }
+    int x = (xPos) / 60;
+    int y = (yPos - 50) / 60;
 
+    if (computerBoard->IsBusy(x, y))
+    {
+        if (playerShootingBoard->Shoot(x, y, true))
+        {
+            throw std::exception("graczWin");
+        }
+    }
+    else
+    {
+        playerShootingBoard->Shoot(x, y, false);
+    }
+
+
+}
+
+void App::ComputerShooting(sf::Event &event)
+{
+    int x = 0;
+    int y = 0;
+
+    unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+    std::mt19937 gen(seed);
+    std::uniform_int_distribution<std::mt19937::result_type> dist;
+
+    do
+    {
+        x = dist(gen) % 10;
+        y = dist(gen) % 10;
+
+    } while (playerBoard->isShooted(x, y));
+
+    std::cout<<x<<","<<y<<std::endl;
+
+    if (playerBoard->IsBusy(x, y))
+    {
+        playerBoard->SetShooted(x,y,true);
+        if (computerShootingBoard->Shoot(x, y, true))
+        {
+            throw std::exception("computerWin");
+        }
+    }
+    else
+    {
+        playerBoard->SetShooted(x,y,false);
+        computerShootingBoard->Shoot(x, y, false);
+    }
 }
 
 void App::FontSetting()
@@ -165,9 +260,6 @@ void App::FontSetting()
     textPlayerBoard.setFillColor(sf::Color::Red);
     textPlayerShootingBoard.setFillColor(sf::Color::Red);
     comunicats.setFillColor(sf::Color::Red);
-
-    //textPlayerBoard.setStyle(sf::Text::Bold);
-    //textPlayerShootingBoard.setStyle(sf::Text::Bold);
 
     textPlayerBoard.setPosition(850, 0);
     textPlayerShootingBoard.setPosition(150, 0);

@@ -2,12 +2,10 @@
 
 ShowingBoard::ShowingBoard(bool _isPlayer) : Board(650, _isPlayer)
 {
-
-}
-
-void ShowingBoard::Set(int x, int y)
-{
-
+    if (_isPlayer == false)
+    {
+        SetShipsAsComputer();
+    }
 }
 
 void ShowingBoard::SetShip(int xPos1, int yPos1, int xPos2, int yPos2)
@@ -49,4 +47,27 @@ void ShowingBoard::SetShip(int xPos1, int yPos1, int xPos2, int yPos2)
             }
         }
     }
+}
+
+bool ShowingBoard::IsShip(int x, int y)
+{
+    return tiles[x][y].IsTaken();
+}
+
+void ShowingBoard::SetShipsAsComputer()
+{
+    SetShip(0,0,0,4);
+    SetShip(1,0,1,3);
+    SetShip(2,0,2,2);
+    SetShip(3,0,3,1);
+}
+
+bool ShowingBoard::isShooted(int x, int y)
+{
+    return tiles[x][y].IsShooted();
+}
+
+void ShowingBoard::SetShooted(int x, int y,bool hit)
+{
+    tiles[x][y].SetShooted(hit);
 }

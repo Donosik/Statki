@@ -5,10 +5,11 @@
 
 class ShootingBoard : public Board
 {
+    int shootedCorrectly;
 public:
     ShootingBoard(bool _isPlayer=true);
 
-    void Set(int x,int y) override;
+    bool Shoot(int x,int y,bool hit);
 };
 
 
