@@ -4,7 +4,6 @@ Board::Board(int _offset,bool _isPlayer)
 {
     isPlayer=_isPlayer;
     offset=_offset;
-    isDead=false;
     for (int i = 0; i < 10; i++)
     {
         for (int j = 0; j < 10; j++)

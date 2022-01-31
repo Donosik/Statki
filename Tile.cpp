@@ -31,11 +31,11 @@ void Tile::Draw(sf::RenderWindow &window)
     window.draw(shape);
 }
 
-void Tile::SetStatus(int length)
+void Tile::SetStatus(int type)
 {
     statusShip = StatusShip::TAKEN;
     sf::Color shipColor;
-    switch (length)
+    switch (type)
     {
         case 1:
         {
